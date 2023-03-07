@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrest_api_guidelines=self.webpackChunkrest_api_guidelines||[]).push([[9697],{5122:e=>{e.exports=JSON.parse('{"permalink":"/rest-api-guidelines/blog/tags/hello","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrest_api_guidelines=self.webpackChunkrest_api_guidelines||[]).push([[1661],{9495:s=>{s.exports=JSON.parse('{"label":"docusaurus","permalink":"/rest-api-guidelines/blog/tags/docusaurus","allTagsPath":"/rest-api-guidelines/blog/tags","count":4}')}}]);

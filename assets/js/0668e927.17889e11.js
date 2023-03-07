@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrest_api_guidelines=self.webpackChunkrest_api_guidelines||[]).push([[9682],{9328:e=>{e.exports=JSON.parse('{"label":"hello","permalink":"/rest-api-guidelines/blog/tags/hello","allTagsPath":"/rest-api-guidelines/blog/tags","count":2}')}}]);
