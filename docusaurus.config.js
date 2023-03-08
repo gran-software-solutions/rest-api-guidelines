@@ -76,15 +76,9 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: '/category/example-apis',
+            docId: 'start',
             position: 'left',
-            label: 'Example APIs',
-          },
-          {
-            type: 'doc',
-            docId: '/category/guidelines',
-            position: 'left',
-            label: 'Guidelines',
+            label: "Let's start"
           },
           {
             href: `https://github.com/${organizationName}/${projectName}`,
@@ -96,6 +90,19 @@ const config = {
       footer: {
         style: 'dark',
         links: [
+          {
+            title: 'GRAN',
+            items: [
+              {
+                label: 'Website',
+                to: 'https://www.gransoftware.de'
+              },
+              {
+                label: 'LinkedIn',
+                to: 'https://www.linkedin.com/company/gran-software-solutions/'
+              }
+            ]
+          },
           {
             title: 'Guidelines',
             items: [
