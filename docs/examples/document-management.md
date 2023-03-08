@@ -8,15 +8,18 @@ sidebar_position: 1
 
 Let's create an API for managing documents. We will be able to:
 
-* upload a document
-* list all documents
-* download a document
-* retrieve metadata of a document
-* delete a document
+* Upload a document
+* List all uploaded documents
+* Download a document
+* Retrieve metadata of a document
+* Update metadata of a document
+* Delete a document
 
 ## OpenAPI Specification
 
-```yaml
+The final OpenAPI specification will looks like this:
+
+```yaml title="OpenAPI Specification"
 openapi: 3.0.0
 info:
 title: Document Management API
