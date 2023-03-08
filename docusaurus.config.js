@@ -68,7 +68,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'GRAN Software Solutions REST API Guidelines',
+        title: 'GRAN REST API Guidelines',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
@@ -76,7 +76,13 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: '/category/example-apis',
+            position: 'left',
+            label: 'Example APIs',
+          },
+          {
+            type: 'doc',
+            docId: '/category/guidelines',
             position: 'left',
             label: 'Guidelines',
           },
