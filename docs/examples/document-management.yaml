@@ -26,12 +26,6 @@ paths:
                   items:
                     type: string
       responses:
-        '400':
-          description: In case of validation errors, such as missing required fields, file size too large, etc.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Error'
         '201':
           description: Created
           headers:
@@ -40,6 +34,42 @@ paths:
                 type: string
                 description: Location of the created document
 
+        '413':
+          description: File too large
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                fileTooLarge:
+                  value:
+                    type: '/errors/file-too-large'
+                    title: 'File too large'
+                    status: 413
+                    detail: 'The file is too large.'
+                    instance: 'SOME_UUID_HERE'
+
+        '400':
+          description: In case of validation errors, such as missing required fields, file size too large, etc.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingDescription:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing description field'
+                    status: 400
+                    detail: 'The description is required.'
+                    instance: 'SOME_UUID_HERE'
+                missingTags:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing tags'
+                    status: 400
+                    detail: 'The tags are required.'
+                    instance: 'SOME_UUID_HERE'
 components:
   schemas:
     Error:
