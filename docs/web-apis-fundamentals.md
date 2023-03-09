@@ -27,3 +27,22 @@ Clients of your APIs are busy building their own products and are not always abl
 
 Big companies like Google advocate that you should not do versioning of your APIs. This implies that it will be hard to fix bad API design decisions in the future. It's important to think hard when designing
 an initial API version.
+
+### Design for simplicity, intuitiveness and consistency
+
+Your APIs have to be **consistent**. If you offer a similar resource in two different APIs, it should have the same logic, structure and naming conventions. This makes it easier for clients to use your APIs, and
+learn new ones.
+
+So, if you have an API that returns a list of `users`, this is an example of a simple and intuitive API:
+
+```http
+GET https://api.acme.com/users?limit=10&offset=5&sortBy=name+asc&filter=name eq John and age lt 30
+```
+
+Make sure that your `orders` API doesn't look like this:
+
+```http
+GET https://api.acme.com/orders?top=10&skip=5&sort=name&order=asc&filter=name:John&filter=age:lt:30
+```
+
+Your APIs should [use OpenAPI](/guidelines/use-open-api.md) to document the API. It's an art to find a balance between simplicity and completeness/flexibility.
