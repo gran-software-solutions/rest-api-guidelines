@@ -45,4 +45,8 @@ Make sure that your `orders` API doesn't look like this:
 GET https://api.acme.com/orders?top=10&skip=5&sort=name&order=asc&filter=name:John&filter=age:lt:30
 ```
 
-Your APIs should [use OpenAPI](/guidelines/use-open-api.md) to document the API. It's an art to find a balance between simplicity and completeness/flexibility.
+With simplicity in mind, you should still allow for `GET https://api.acme.com/orders` to return orders (with some defaults applied, like default limit of 50, and a link to the next page of results contained in the response).
+
+Your APIs should [use OpenAPI](/guidelines/use-open-api.md) to document all the promises your API makes to clients.
+
+It's a bit of art to find a balance between simplicity and completeness/flexibility.
