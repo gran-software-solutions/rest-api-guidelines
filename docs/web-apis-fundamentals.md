@@ -28,7 +28,7 @@ Clients of your APIs are busy building their own products and are not always abl
 Big companies like Google advocate that you should not do versioning of your APIs. This implies that it will be hard to fix bad API design decisions in the future. It's important to think hard when designing
 an initial API version.
 
-### Design for simplicity, intuitiveness and consistency
+### Design for simplicity, intuitiveness, flexibility and consistency
 
 Your APIs have to be **consistent**. If you offer a similar resource in two different APIs, it should have the same logic, structure and naming conventions. This makes it easier for clients to use your APIs, and
 learn new ones.
@@ -45,8 +45,22 @@ Make sure that your `orders` API doesn't look like this:
 GET https://api.acme.com/orders?top=10&skip=5&sort=name&order=asc&filter=name:John&filter=age:lt:30
 ```
 
-With simplicity in mind, you should still allow for `GET https://api.acme.com/orders` to return orders (with some defaults applied, like default limit of 50, and a link to the next page of results contained in the response).
+With **simplicity** in mind, you should still allow for `GET https://api.acme.com/orders` to return orders (with some defaults applied, like default limit of `50`, and a link to the next page of results contained in the response).
 
-Your APIs should [use OpenAPI](/guidelines/use-open-api.md) to document all the promises your API makes to clients.
+When talking about **flexibility**, it may happend that your clients need to control the "shape" of the response, to avoid over/under fetching of data. You can, for instance, allow them to specify which fields they want to get in the response,
+using a `fields` query parameter, such as `GET https://api.acme.com/orders?fields=id,name,price`.
 
-It's a bit of art to find a balance between simplicity and completeness/flexibility.
+As demonstrated above, we can also control the size of a "page of data" using `limit` and `offset` query parameter. We should also allow for sorting responses, using `sortBy` query parameter.
+
+It's a bit of art to find a balance between simplicity and completeness/flexibility. Whatever you come up with, your APIs should [use OpenAPI](/guidelines/use-open-api.md) to document all the promises your API makes to clients.
+
+## Avoid chatty APIs
+
+Chatty APIs are APIs that require many requests to complete a single task. This is bad for performance (establishing `HTTP` connections has its price) and user experience (possible client responsiveness implications).
+Additionally, it exposes your business logic to the client, which is not a good idea, as this changes regularly.
+
+If, for instance, on the `orders` example above, you want to know which products are in each order, you should not have to make a separate request for each order to get the products. Instead, you can
+have a query parameter that allows you to include the `products` in the response, such as `GET https://api.acme.com/orders?include=products`. This way you can get additional data on demand, and only if you need them.
+
+If your user experience differs significantly between the web and mobile clients, you should consider having separate APIs for each platform. This allows you to optimize the API for each platform.
+So-called [Backend for Frontend pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends).
