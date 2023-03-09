@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+---
+import CodeBlock from '@theme/CodeBlock';
+import MyComponentSource from '!!raw-loader!./document-management.yaml';
+
+# Document Management API
+
+## Introduction
+
+Let's create an API for managing documents. We will be able to:
+
+* Upload a document
+  * Alongside binary data, we will also be able to send metadata:
+    * Description as a string
+    * Tags as a list of strings
+* List all uploaded documents
+* Download a document
+* Retrieve metadata of a document
+* Update metadata of a document
+* Delete a document
+
+## OpenAPI Specification 2
+
+The final OpenAPI specification will look like this:
+
+<CodeBlock language="yaml" title="OpenAPI specification">{MyComponentSource}</CodeBlock>
+
+## Q&A
+
+### What are some other options for uploading files?
+
+### How about large files?
+
+

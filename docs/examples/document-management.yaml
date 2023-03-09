@@ -19,9 +19,19 @@ paths:
                 file:
                   type: string
                   format: binary
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
       responses:
         '400':
-          $ref: '#/components/schemas/ProblemJson'
+          description: In case of validation errors, such as missing required fields, file size too large, etc.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '201':
           description: Created
           headers:
@@ -32,7 +42,7 @@ paths:
 
 components:
   schemas:
-    ProblemJson:
+    Error:
       properties:
         type:
           type: string
@@ -49,9 +59,14 @@ components:
         instance:
           type: string
           description: URI reference RFC 3986
-        stacktrace:
-          type: string
-          description: Stacktrace
-        cause:
-          type: string
-          description: Cause
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth2/authorize
+          tokenUrl: https://example.com/oauth2/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants read and write access to administrative information
