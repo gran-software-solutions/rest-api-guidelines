@@ -8,17 +8,17 @@ import MyComponentSource from '!!raw-loader!./document-management.yaml';
 
 ## Introduction
 
-Let's create an API for managing documents. We will be able to:
+Let's create an API for managing documents. Here are the requirements:
 
-* Upload a document
-  * Alongside binary data, we will also be able to send metadata:
-    * Description as a string
-    * Tags as a list of strings
-* List all uploaded documents
-* Download a document
-* Retrieve metadata of a document
-* Update metadata of a document
-* Delete a document
+| API Operation                                               | Description                                           | Implemented?       |
+|-------------------------------------------------------------|-------------------------------------------------------|--------------------|
+| Upload a document with its metadata (description, and tags) | Upload a document alongside metadata                  | :heavy_check_mark: |
+| List all uploaded documents                                 | Ability to list all the documents uploadd by the user | :x:                ||
+| Download a document                                         | Ability to download a doc by it's identifier          | :x:                |
+| Retrieve metadata of a document                             | Ability to get a metadata of a document               | :x:                |
+| Update metadata of a document                               | Ability to modify existing document metadata          | :x:                |
+| Delete a document                                           | Ability to delete existing document                   | :x:                |
+
 
 ## OpenAPI Specification
 
