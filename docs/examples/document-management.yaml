@@ -140,14 +140,10 @@ paths:
                 - $ref: '#/components/schemas/PatchDescription'
                 - $ref: '#/components/schemas/PatchTags'
       responses:
-        '200':
+        '204':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Document'
         '404':
-          description: Not found
+          description: Document not found
         '412':
           description: Precondition failed
           content:
