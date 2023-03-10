@@ -11,7 +11,7 @@ Let's create an API for managing documents. Here are the requirements:
 | API Operation                                               | Description                                                                                                                                                            | Implemented?       |
 |-------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
 | Upload a document with its metadata (description, and tags) | Upload a document alongside metadata                                                                                                                                   | :heavy_check_mark: |
-| List all uploaded documents                                 | Ability to list all the documents uploaded by the user<br/>Documents need to be able to be filtered by tag and description<br/>Pagination and sorting must be provided | :x:                ||
+| List all uploaded documents                                 | Ability to list all the documents uploaded by the user<br/>Documents need to be able to be filtered by tag and description<br/>Pagination and sorting must be provided | :heavy_check_mark: |
 | Download a document                                         | Ability to download a doc by it's identifier                                                                                                                           | :x:                |
 | Retrieve metadata of a document                             | Ability to get a metadata of a document                                                                                                                                | :x:                |
 | Update metadata of a document                               | Ability to modify existing document metadata                                                                                                                           | :x:                |
@@ -23,9 +23,3 @@ Let's create an API for managing documents. Here are the requirements:
 The final OpenAPI specification will look like this:
 
 <CodeBlock language="yaml" title="OpenAPI specification">{MyComponentSource}</CodeBlock>
-
-## Q&A
-
-### What are some other options for uploading files?
-
-### How about large files?
