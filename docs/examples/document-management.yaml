@@ -5,6 +5,8 @@ info:
   version: 1.0.0
 servers:
   - url: 'http://localhost:8080'
+security:
+  - oauth2: [ read, write ]
 paths:
   /documents:
     get:
@@ -181,10 +183,8 @@ components:
     oauth2:
       type: oauth2
       flows:
-        authorizationCode:
-          authorizationUrl: https://example.com/oauth2/authorize
-          tokenUrl: https://example.com/oauth2/token
+        clientCredentials:
+          tokenUrl: https://accounts.google.com/o/oauth2/token
           scopes:
-            read: Grants read access
-            write: Grants write access
-            admin: Grants read and write access to administrative information
+            read: Read access to protected resources
+            write: Write access to protected resources
