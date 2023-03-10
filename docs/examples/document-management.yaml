@@ -97,7 +97,7 @@ paths:
                     instance: 'SOME_UUID_HERE'
   "/documents/{id}":
     get:
-      summary: Retrieves a document
+      summary: Retrieves a document either as binary, or as JSON (metadata only)
       operationId: getDocument
       parameters:
         - name: id
@@ -111,6 +111,9 @@ paths:
         '200':
           description: OK
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
             "*/*":
               schema:
                 type: string
