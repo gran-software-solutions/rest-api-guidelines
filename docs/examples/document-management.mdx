@@ -10,14 +10,14 @@ import MyComponentSource from '!!raw-loader!./document-management.yaml';
 
 Let's create an API for managing documents. Here are the requirements:
 
-| API Operation                                               | Description                                           | Implemented?       |
-|-------------------------------------------------------------|-------------------------------------------------------|--------------------|
-| Upload a document with its metadata (description, and tags) | Upload a document alongside metadata                  | :heavy_check_mark: |
-| List all uploaded documents                                 | Ability to list all the documents uploadd by the user | :x:                ||
-| Download a document                                         | Ability to download a doc by it's identifier          | :x:                |
-| Retrieve metadata of a document                             | Ability to get a metadata of a document               | :x:                |
-| Update metadata of a document                               | Ability to modify existing document metadata          | :x:                |
-| Delete a document                                           | Ability to delete existing document                   | :x:                |
+| API Operation                                               | Description                                                                                                                                                            | Implemented?       |
+|-------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
+| Upload a document with its metadata (description, and tags) | Upload a document alongside metadata                                                                                                                                   | :heavy_check_mark: |
+| List all uploaded documents                                 | Ability to list all the documents uploaded by the user<br/>Documents need to be able to be filtered by tag and description<br/>Pagination and sorting must be provided | :x:                ||
+| Download a document                                         | Ability to download a doc by it's identifier                                                                                                                           | :x:                |
+| Retrieve metadata of a document                             | Ability to get a metadata of a document                                                                                                                                | :x:                |
+| Update metadata of a document                               | Ability to modify existing document metadata                                                                                                                           | :x:                |
+| Delete a document                                           | Ability to delete existing document                                                                                                                                    | :x:                |
 
 
 ## OpenAPI Specification
@@ -32,4 +32,5 @@ The final OpenAPI specification will look like this:
 
 ### How about large files?
 
+[^1]: We also need to support filtering by description, and tags
 

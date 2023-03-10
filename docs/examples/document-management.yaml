@@ -7,6 +7,23 @@ servers:
   - url: 'http://localhost:8080'
 paths:
   /documents:
+    get:
+      summary: Retrieves user documents
+      operationId: getDocuments
+      security:
+        - oauth2:
+            - read
+      parameters:
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
     post:
       summary: Create a document
       operationId: createDocument
@@ -71,7 +88,42 @@ paths:
                     detail: 'The tags are required.'
                     instance: 'SOME_UUID_HERE'
 components:
+  parameters:
+    Sort:
+      name: sort
+      in: query
+      description: |
+        Sort by field
+        
+        If the sorting field does not exist, it will be ignored. If the field is prefixed with a minus sign, the sorting will be descending. 
+        If the field is prefixed with a plus sign, the sorting will be ascending. If the field is not prefixed with a minus or plus sign, the sorting will be ascending. 
+        Multiple fields can be specified, separated by commas
+      schema:
+        type: string
+      example: `-createdAt,description`
   schemas:
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document ID
+        description:
+          type: string
+          description: Document description
+        tags:
+          type: array
+          items:
+            type: string
+          description: Document tags
+        createdAt:
+          type: string
+          format: date-time
+          description: Document creation date
+        updatedAt:
+          type: string
+          format: date-time
+          description: Document update date
     Error:
       properties:
         type:
