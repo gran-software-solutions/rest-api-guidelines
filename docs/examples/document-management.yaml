@@ -100,6 +100,9 @@ components:
     Offset:
       name: offset
       in: query
+      schema:
+        type: integer
+        minimum: 0
       description: |
         Offset the number of results
         
@@ -107,6 +110,11 @@ components:
     Limit:
       name: limit
       in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
       description: |
         Limit the number of results
         
@@ -114,6 +122,9 @@ components:
     Filter:
       name: filter
       in: query
+      schema:
+        type: string
+        example: name eq "John"
       description: |
         Filter by field
         
@@ -123,6 +134,9 @@ components:
     Query:
       name: query
       in: query
+      schema:
+        type: string
+        example: 'cobol developer'
       description: |
         Query
         
@@ -130,15 +144,15 @@ components:
     Sort:
       name: sort
       in: query
+      schema:
+        type: string
+        example: '-createdAt,+description'
       description: |
         Sort by field
         
         If the sorting field does not exist, it will be ignored. If the field is prefixed with a minus sign, the sorting will be descending. 
         If the field is prefixed with a plus sign, the sorting will be ascending. If the field is not prefixed with a minus or plus sign, the sorting will be ascending. 
         Multiple fields can be specified, separated by commas
-      schema:
-        type: string
-      example: `-createdAt,description`
   schemas:
     Document:
       type: object
