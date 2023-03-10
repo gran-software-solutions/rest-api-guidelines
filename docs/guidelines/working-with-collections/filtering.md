@@ -17,9 +17,9 @@ For many APIs it will be critical to come up with an effective filtering strateg
 Filtering data is a complex topic, in pretty much any technology dealing with data. Be it SQL, NoSQL, ElasticSearch, or
 any other technology. SQL, for example, provides a rich set of operators, such as `AND`, `OR`, `LIKE`, `IN`, `BETWEEN`, `IS NULL`, `IS NOT NULL`, `>`, etc.
 
-### Case studies
+### Job Portal Case study
 
-Suppose we want to build a Job portal, as the one on the image below:
+Suppose we want to build a **Job portal**, similar to the one on the image below:
 
 ![Job portal](./img/job-portal-search.png)
 
