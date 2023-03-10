@@ -95,6 +95,28 @@ paths:
                     status: 400
                     detail: 'The tags are required.'
                     instance: 'SOME_UUID_HERE'
+  "/documents/{id}":
+    get:
+      summary: Retrieves a document
+      operationId: getDocument
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: Document ID
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not found
 components:
   parameters:
     Offset:
