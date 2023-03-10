@@ -15,6 +15,10 @@ paths:
             - read
       parameters:
         - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Query'
+        - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
       responses:
         '200':
           description: OK
@@ -24,6 +28,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Document'
+        '204':
+          description: In case no documents are found
     post:
       summary: Create a document
       operationId: createDocument
@@ -89,6 +95,36 @@ paths:
                     instance: 'SOME_UUID_HERE'
 components:
   parameters:
+    Offset:
+      name: offset
+      in: query
+      description: |
+        Offset the number of results
+        
+        The offset must be greater than or equal to 0. If the offset is not specified, the default value of 0 will be used.
+    Limit:
+      name: limit
+      in: query
+      description: |
+        Limit the number of results
+        
+        The limit must be between 1 and 100. If the limit is not specified, the default value of 10 will be used.
+    Filter:
+      name: filter
+      in: query
+      description: |
+        Filter by field
+        
+        If the filtering field does not exist, it will be ignored. If the field is prefixed with a minus sign, the filtering will be negated. 
+        If the field is prefixed with a plus sign, the filtering will be positive. If the field is not prefixed with a minus or plus sign, the filtering will be positive. 
+        Multiple fields can be specified, separated by commas
+    Query:
+      name: query
+      in: query
+      description: |
+        Query
+        
+        The query is a string that will be used to search for documents. The query will be matched against the description and tags fields.
     Sort:
       name: sort
       in: query
