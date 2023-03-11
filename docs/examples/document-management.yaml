@@ -10,7 +10,7 @@ security:
 paths:
   /documents:
     get:
-      summary: Retrieves user documents
+      summary: Retrieve user documents
       operationId: getDocuments
       security:
         - oauth2:
@@ -104,8 +104,16 @@ paths:
           type: string
           format: uuid
           description: Document ID
+    delete:
+      summary: Delete a document
+      operationId: deleteDocument
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Not found
     get:
-      summary: Retrieves a document either as binary, or as JSON (metadata only)
+      summary: Retrieve a document either as binary, or as JSON (metadata only)
       operationId: getDocument
       responses:
         '200':
