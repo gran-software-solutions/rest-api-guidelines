@@ -217,6 +217,7 @@ components:
         Multiple fields can be specified, separated by commas
   schemas:
     PatchDocument:
+      description: Patch document, as defined in RFC 6902
       type: array
       items:
         type: object
