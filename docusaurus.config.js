@@ -120,6 +120,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/gran-software-solutions/rest-api-guidelines',
               },
+              {
+                label: 'Credits',
+                href: '/credits'
+              }
             ],
           },
         ],
