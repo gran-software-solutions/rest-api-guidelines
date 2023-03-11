@@ -137,8 +137,7 @@ paths:
             schema:
               type: object
               oneOf:
-                - $ref: '#/components/schemas/PatchDescription'
-                - $ref: '#/components/schemas/PatchTags'
+                - $ref: '#/components/schemas/PatchDocument'
       responses:
         '204':
           description: OK
@@ -217,29 +216,19 @@ components:
         If the field is prefixed with a plus sign, the sorting will be ascending. If the field is not prefixed with a minus or plus sign, the sorting will be ascending. 
         Multiple fields can be specified, separated by commas
   schemas:
-    PatchDescription:
-      type: object
-      properties:
-        op:
-          type: string
-          default: replace
-        path:
-          type: string
-          default: /description
-        description:
-          type: string
-    PatchTags:
-      type: object
-      properties:
-        op:
-          type: string
-          default: replace
-        path:
-          type: string
-          default: /tags
-        tags:
-          type: array
-          items:
+    PatchDocument:
+      type: array
+      items:
+        type: object
+        properties:
+          op:
+            type: string
+            enum:
+              - replace|
+            description: Only replace is supported
+          path:
+            type: string
+          value:
             type: string
     Document:
       type: object
