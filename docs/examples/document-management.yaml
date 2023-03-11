@@ -8,6 +8,99 @@ servers:
 security:
   - oauth2: [ read, write ]
 paths:
+  /document-conversions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Conversion ID
+    delete:
+      summary: Cancels a document conversion
+      operationId: cancelDocumentConversion
+      responses:
+        '204':
+          description: Document conversion cancelled (best effort)
+        '404':
+          description: Conversion to cancel not found
+    get:
+      summary: Retrieve status of a document conversion
+      operationId: getDocumentConversionStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentConversionStatus'
+        '303':
+          description: HTTP redirect to the converted document
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the converted document
+        '404':
+          description: No such conversion
+  /document-conversions:
+    post:
+      summary: Convert a document to pdf
+      operationId: convertDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documentId:
+                  type: string
+                  format: uuid
+                  description: ID of a document to convert
+                targetFormat:
+                  type: string
+                  description: Target format
+                  enum:
+                    - pdf
+      responses:
+        '202':
+          description: Requested conversion is accepted
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of status tracking resource
+        '400':
+          description: In case of validation errors, such as missing required fields, file size too large, etc.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingDocumentId:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing documentId field'
+                    status: 400
+                    detail: 'The documentId is required.'
+                    instance: 'SOME_UUID_HERE'
+                missingTargetFormat:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing targetFormat field'
+                    status: 400
+                    detail: 'The targetFormat is required.'
+                    instance: 'SOME_UUID_HERE'
+                invalidTargetFormat:
+                  value:
+                    type: '/errors/invalid-field'
+                    title: 'Invalid targetFormat field'
+                    status: 400
+                    detail: 'The targetFormat is invalid.'
+                    instance: 'SOME_UUID_HERE'
+        '404':
+          description: No such document to convert
   /documents:
     get:
       summary: Retrieve user documents
@@ -224,6 +317,40 @@ components:
         If the field is prefixed with a plus sign, the sorting will be ascending. If the field is not prefixed with a minus or plus sign, the sorting will be ascending. 
         Multiple fields can be specified, separated by commas
   schemas:
+    DocumentConversionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - CONVERTING
+            - DONE
+            - FAILED
+            - CANCELLED
+          description: Document conversion status
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: Date-time of last conversion update, per ISO 8601
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              rel:
+                type: string
+                enum:
+                  - cancel
+              method:
+                type: string
+                enum:
+                  - DELETE
+                description: HTTP method to cancel the conversion
+              href:
+                type: string
+                format: uri
+                description: URI (RFC 3986) of resource to be canceled
     PatchDocument:
       description: Patch document, as defined in RFC 6902
       type: array
