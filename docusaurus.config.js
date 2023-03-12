@@ -79,7 +79,7 @@ const config = {
             type: 'doc',
             docId: 'start',
             position: 'left',
-            label: "Start here"
+            label: "Get started"
           },
           {
             href: `https://github.com/${organizationName}/${projectName}`,
