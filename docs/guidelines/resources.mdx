@@ -22,7 +22,11 @@ Each resource has its own URL. URLs are organized hierarchically. At the root of
 where you can list all available collections and singletons. You can also add some API metadata, like versioning, some operational status, etc.
 One example of how it may look like:
 
-```json title="GET https://api.acme.com/"
+```bash title="GET https://api.acme.com/"
+curl -H 'Accept: application/json' https://api.acme.com/
+```
+
+```json title="Response"
 {
   "version": "1.0.0",
   "status": "ok",
@@ -72,15 +76,14 @@ The author of [such approach](https://restful-api-design.readthedocs.io/en/lates
 
 An example could look like:
 
-```http title="Sending an email to a user via an action"
-POST https://api.acme.com/users/123/actions
-{
+```bash title="Sending an email to a user via an action"
+curl -H 'Content-Type: application/json' -x POST https://api.acme.com/users/123/actions -d '{
   "type": "SEND_EMAIL",
   "payload": {
     "subject": "Welcome to Acme!",
     "body": "..."
   }
-}
+}'
 ```
 
 On the implementation side, you need to implement a handler able to process polymorphic messages.

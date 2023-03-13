@@ -41,14 +41,14 @@ learn new ones.
 
 So, if you have an API that returns a list of `users`, this is an example of a simple and intuitive API:
 
-```http
-GET https://api.acme.com/users?limit=10&offset=5&sortBy=name+asc&filter=name eq John and age lt 30
+```bash
+curl https://api.acme.com/users?limit=10&offset=5&sortBy=name+asc&filter=name eq John and age lt 30
 ```
 
 Make sure that your `orders` API doesn't look like this:
 
-```http
-GET https://api.acme.com/orders?top=10&skip=5&sort=name&order=asc&filter=name:John&filter=age:lt:30
+```bash
+curl https://api.acme.com/orders?top=10&skip=5&sort=name&order=asc&filter=name:John&filter=age:lt:30
 ```
 
 With **simplicity** in mind, you should still allow for `GET https://api.acme.com/orders` to return orders (with some defaults applied, like default limit of `50`, and a link to the next page of results contained in the response).
