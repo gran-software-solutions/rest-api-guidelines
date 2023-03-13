@@ -66,8 +66,26 @@ for getting caching info, content-type and other headers, etc.
 The basic idea is to try to map your business events to URLs and HTTP methods. For instance, a business event of **registering a new user** would
 map to a `POST` request to the `users` collection resource. A business event of **deleting a user account** would map to a `DELETE` request to the `users` collection resource.
 
-:::note
-In some cases it feels like the table above is not enough
+:::tip Actions
+In cases you can't map your business events to URLs and HTTP methods, you can use `actions`.
+The author of [such approach](https://restful-api-design.readthedocs.io/en/latest/methods.html#actions) proposes having `actions` sub-resource (either on resource or collection level), where RPC-like messages cane be POSTed to.
+
+An example could look like:
+
+```http title="Sending an email to a user via an action"
+POST https://api.acme.com/users/123/actions
+{
+  "type": "SEND_EMAIL",
+  "payload": {
+    "subject": "Welcome to Acme!",
+    "body": "..."
+  }
+}
+```
+
+On the implementation side, you need to implement a handler able to process polymorphic messages.
+
+The `actions` approach should be used with caution, as if it's heavily used it can signify that your API is not well-designed, or better fits RPC approach.
 :::
 
 ### Resource representation
