@@ -26,6 +26,14 @@ Clients of your APIs are busy building their own products and are not always abl
 Big companies like Google advocate that you should not do versioning of your APIs. This implies that it will be hard to fix bad API design decisions in the future. It's important to think hard when designing
 an initial API version.
 
+## Statelessness
+
+REST APIs are stateless, meaning the server doesn’t store client state. This makes it easy to scale them by adding more servers. Overall, REST APIs allow systems developed with different technologies to communicate
+seamlessly and are easy to scale. This is in contrast to SOAP APIs, which are stateful. SOAP APIs require a session to be established between the client and the server. This session is used to store client state.
+This makes SOAP APIs more difficult to scale.
+
+TODO
+
 ## Design for simplicity, intuitiveness, flexibility and consistency
 
 Your APIs have to be **consistent**. If you offer a similar resource in two different APIs, it should have the same logic, structure and naming conventions. This makes it easier for clients to use your APIs, and

@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Filtering data sets
+# Filtering data sets - `filter`
 
 Data tends to grow over time, and as such, it is important to be able to filter the data sets that are returned by the API.
 This allows for effective usage of resources, since it will only return the data set that is required.
@@ -12,10 +12,10 @@ needed, avoiding extraneous fetching anti-pattern[^1].
 
 For many APIs it will be critical to come up with an effective filtering strategy.
 
-## Filtering is complex
-
+:::note
 Filtering data is a complex topic, in pretty much any technology dealing with data. Be it SQL, NoSQL, ElasticSearch, or
 any other technology. SQL, for example, provides a rich set of operators, such as `AND`, `OR`, `LIKE`, `IN`, `BETWEEN`, `IS NULL`, `IS NOT NULL`, `>`, etc.
+:::
 
 ### Job Portal Case study
 
@@ -62,6 +62,6 @@ curl https://api.acme.com/jobs?
 
 ### OData
 
-If the level of flexibility above is not enough, you can think of using [OData](/docs/guidelines/odata).
+If the level of flexibility above is not enough, you can think of using [OData](https://www.odata.org/).
 
 [^1]: https://learn.microsoft.com/en-us/azure/architecture/antipatterns/extraneous-fetching/

@@ -105,15 +105,6 @@ const config = {
             ]
           },
           {
-            title: 'Guidelines',
-            items: [
-              {
-                label: 'Guidelines',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
             title: 'More',
             items: [
               {
