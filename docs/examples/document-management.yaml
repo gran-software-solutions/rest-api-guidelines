@@ -1,0 +1,416 @@
+openapi: 3.0.3
+info:
+  title: Document management
+  description: Document management
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+security:
+  - oauth2: [ read, write ]
+paths:
+  /document-conversions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Conversion ID
+    delete:
+      summary: Cancels a document conversion
+      operationId: cancelDocumentConversion
+      responses:
+        '204':
+          description: Document conversion cancelled (best effort)
+        '404':
+          description: Conversion to cancel not found
+    get:
+      summary: Retrieve status of a document conversion
+      operationId: getDocumentConversionStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentConversionStatus'
+        '303':
+          description: HTTP redirect to the converted document
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the converted document
+        '404':
+          description: No such conversion
+  /document-conversions:
+    post:
+      summary: Convert a document to pdf
+      operationId: convertDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documentId:
+                  type: string
+                  format: uuid
+                  description: ID of a document to convert
+                targetFormat:
+                  type: string
+                  description: Target format
+                  enum:
+                    - pdf
+      responses:
+        '202':
+          description: Requested conversion is accepted
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of status tracking resource
+        '400':
+          description: In case of validation errors, such as missing required fields, file size too large, etc.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingDocumentId:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing documentId field'
+                    status: 400
+                    detail: 'The documentId is required.'
+                    instance: 'SOME_UUID_HERE'
+                missingTargetFormat:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing targetFormat field'
+                    status: 400
+                    detail: 'The targetFormat is required.'
+                    instance: 'SOME_UUID_HERE'
+                invalidTargetFormat:
+                  value:
+                    type: '/errors/invalid-field'
+                    title: 'Invalid targetFormat field'
+                    status: 400
+                    detail: 'The targetFormat is invalid.'
+                    instance: 'SOME_UUID_HERE'
+        '404':
+          description: No such document to convert
+  /documents:
+    get:
+      summary: Retrieve user documents
+      operationId: getDocuments
+      security:
+        - oauth2:
+            - read
+      parameters:
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Query'
+        - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        '204':
+          description: In case no documents are found
+    post:
+      summary: Create a document
+      operationId: createDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              schema:
+                type: string
+                description: Location of the created document
+
+        '413':
+          description: File too large
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                fileTooLarge:
+                  value:
+                    type: '/errors/file-too-large'
+                    title: 'File too large'
+                    status: 413
+                    detail: 'The file is too large.'
+                    instance: 'SOME_UUID_HERE'
+
+        '400':
+          description: In case of validation errors, such as missing required fields, file size too large, etc.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingDescription:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing description field'
+                    status: 400
+                    detail: 'The description is required.'
+                    instance: 'SOME_UUID_HERE'
+                missingTags:
+                  value:
+                    type: '/errors/missing-required-field'
+                    title: 'Missing tags'
+                    status: 400
+                    detail: 'The tags are required.'
+                    instance: 'SOME_UUID_HERE'
+  "/documents/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Document ID
+    delete:
+      summary: Delete a document
+      operationId: deleteDocument
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Not found
+    get:
+      summary: Retrieve a document either as binary, or as JSON (metadata only)
+      operationId: getDocument
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not found
+    patch:
+      summary: Update metadata of a document
+      operationId: updateDocument
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          schema:
+            type: string
+            description: ETag of the document
+      requestBody:
+        required: true
+        content:
+          application/json-patch+json:
+            schema:
+              type: object
+              oneOf:
+                - $ref: '#/components/schemas/PatchDocument'
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Document not found
+        '412':
+          description: Precondition failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                etagMismatch:
+                  value:
+                    type: '/errors/etag-mismatch'
+                    title: 'ETag mismatch'
+                    status: 412
+                    detail: 'The ETag does not match.'
+                    instance: 'SOME_UUID_HERE'
+components:
+  parameters:
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+      description: |
+        Offset the number of results
+        
+        The offset must be greater than or equal to 0. If the offset is not specified, the default value of 0 will be used.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: |
+        Limit the number of results
+        
+        The limit must be between 1 and 100. If the limit is not specified, the default value of 10 will be used.
+    Filter:
+      name: filter
+      in: query
+      schema:
+        type: string
+        example: name eq "John"
+      description: |
+        Filter by field
+        
+        If the filtering field does not exist, it will be ignored. If the field is prefixed with a minus sign, the filtering will be negated. 
+        If the field is prefixed with a plus sign, the filtering will be positive. If the field is not prefixed with a minus or plus sign, the filtering will be positive. 
+        Multiple fields can be specified, separated by commas
+    Query:
+      name: query
+      in: query
+      schema:
+        type: string
+        example: 'cobol developer'
+      description: |
+        Query
+        
+        The query is a string that will be used to search for documents. The query will be matched against the description and tags fields.
+    Sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        example: '-createdAt,+description'
+      description: |
+        Sort by field
+        
+        If the sorting field does not exist, it will be ignored. If the field is prefixed with a minus sign, the sorting will be descending. 
+        If the field is prefixed with a plus sign, the sorting will be ascending. If the field is not prefixed with a minus or plus sign, the sorting will be ascending. 
+        Multiple fields can be specified, separated by commas
+  schemas:
+    DocumentConversionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - CONVERTING
+            - DONE
+            - FAILED
+            - CANCELLED
+          description: Document conversion status
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: Date-time of last conversion update, per ISO 8601
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              rel:
+                type: string
+                enum:
+                  - cancel
+              method:
+                type: string
+                enum:
+                  - DELETE
+                description: HTTP method to cancel the conversion
+              href:
+                type: string
+                format: uri
+                description: URI (RFC 3986) of resource to be canceled
+    PatchDocument:
+      description: Patch document, as defined in RFC 6902
+      type: array
+      items:
+        type: object
+        properties:
+          op:
+            type: string
+            enum:
+              - replace|
+            description: Only replace is supported
+          path:
+            type: string
+          value:
+            type: string
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document ID
+        description:
+          type: string
+          description: Document description
+        tags:
+          type: array
+          items:
+            type: string
+          description: Document tags
+        createdAt:
+          type: string
+          format: date-time
+          description: Document creation date
+        updatedAt:
+          type: string
+          format: date-time
+          description: Document update date
+    Error:
+      properties:
+        type:
+          type: string
+          description: URI reference RFC 3986
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type
+        status:
+          type: integer
+          description: The HTTP status code generated by the origin server for this occurrence of the problem
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          description: URI reference RFC 3986
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://accounts.google.com/o/oauth2/token
+          scopes:
+            read: Read access to protected resources
+            write: Write access to protected resources

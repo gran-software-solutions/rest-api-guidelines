@@ -68,17 +68,18 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'GRAN Software Solutions REST API Guidelines',
+        title: 'GRAN REST API Guidelines',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
+          srcDark: 'img/logo-dark-mode.svg',
         },
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'start',
             position: 'left',
-            label: 'Guidelines',
+            label: "Get started"
           },
           {
             href: `https://github.com/${organizationName}/${projectName}`,
@@ -91,13 +92,17 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Guidelines',
+            title: 'GRAN',
             items: [
               {
-                label: 'Guidelines',
-                to: '/docs/intro',
+                label: 'Website',
+                to: 'https://www.gransoftware.de'
               },
-            ],
+              {
+                label: 'LinkedIn',
+                to: 'https://www.linkedin.com/company/gran-software-solutions/'
+              }
+            ]
           },
           {
             title: 'More',
@@ -106,14 +111,19 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/gran-software-solutions/rest-api-guidelines',
               },
+              {
+                label: 'Credits',
+                href: '/credits'
+              }
             ],
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} GRAN Software Solutions GmbH. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        additionalLanguages: ['yaml', 'http', 'json'],
+        theme: require('prism-react-renderer/themes/vsLight'),
+        darkTheme: require('prism-react-renderer/themes/vsDark'),
       },
     }),
 };
