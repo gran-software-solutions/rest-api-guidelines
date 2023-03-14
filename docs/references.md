@@ -11,3 +11,4 @@ sidebar_position: 5
 * [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 * [Thoughts on RESTful API Design](https://restful-api-design.readthedocs.io/en/latest/)
 * [Best Practices for Designing a Pragmatic RESTful API](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+* [How to GET a Cup of Coffee](https://www.infoq.com/articles/webber-rest-workflow/)

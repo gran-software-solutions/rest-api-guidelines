@@ -122,8 +122,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['yaml', 'http', 'json'],
-        theme: require('prism-react-renderer/themes/vsLight'),
-        darkTheme: require('prism-react-renderer/themes/vsDark'),
+        theme: require('prism-react-renderer/themes/palenight'),
+        darkTheme: require('prism-react-renderer/themes/palenight'),
       },
     }),
 };
