@@ -30,44 +30,70 @@ A cardinality is a measure of how many instances of one entity are related to on
 
 Depending on how we choose to handle relationships in our RESTful API (embedding, linking, or association resources), we may need different strategies for dealing with different cardinalities.
 
-## Expressing relations using `HTTP Link` headers or `_link` `JSON` attributes
+:::info Expressing relations using HTTP `Link` headers or `_link` `JSON` attribute
 
 In REST, we can express relationships between resources in various way, out of which we find 2 particularly interesting:
 
-* using `HTTP Link` headers
-    ```http
-    GET https://api.acme.com/posts/1
-    Accept: application/json
+* Using HTTP `Link` headers[^1]
 
-    200 OK
-    Content-Type: application/json
-    Link: <https://api.acme.com/authors/1>; rel="author"
+  The `Link` header is a comma-separated list of links, where each link is represented by a URI enclosed in angle brackets, followed by a semicolon, followed by a `rel` attribute that describes the relationship between the resource and the target URI.
+  We prefer this approach for two reasons:
+  * It keeps the response representation clean and simple, not cluttered with `_links` attribute
+  * It relies on the HTTP protocol, with which most developers are already familiar
 
-    {
-      "id": 1,
-      "title": "How to handle relationships in REST APIs",
-      "content": "In this blog post, we will explore how to handle relationships between different entities in a RESTful API..."
+* Using `_links` JSON attribute[^2]
+
+  Most of the projects that use hypermedia, tend to (for some reason) use `_links` attribute. It might be because it's easier
+  to parse and use at the client side. We recommend using `_links` and not `links` to avoid conflicts in cases resource contains `links`
+  (not hypermedia) attribute itself.
+
+<Tabs>
+<TabItem value="header" label="Link header">
+
+```http
+GET https://api.acme.com/posts/1
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+Link: <https://api.acme.com/authors/1>; rel="author", <https://api.acme.com/posts/1/tags>; rel="tags"
+
+{
+    "id": 1,
+    "title": "How to handle relationships in REST APIs",
+    "content": "Lorem ipsum ..."
+}
+```
+
+</TabItem>
+<TabItem value="json" label="_links attribute">
+
+```http
+GET https://api.acme.com/posts/1
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "How to handle relationships in REST APIs",
+  "content": "Lorem ipsum ...",
+  "_links": {
+    "author": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "tags": {
+      "href": "https://api.acme.com/posts/1/tags"
     }
-    ```
-* using `_links` `JSON` attributes
-    ```http
-    GET https://api.acme.com/posts/1
-    Accept: application/json
+  }
+}
+```
 
-    200 OK
-    Content-Type: application/json
+</TabItem>
+</Tabs>
 
-    {
-      "id": 1,
-      "title": "How to handle relationships in REST APIs",
-      "content": "In this blog post, we will explore how to handle relationships between different entities in a RESTful API...",
-      "_links": {
-        "author": {
-          "href": "https://api.acme.com/authors/1"
-        }
-      }
-    }
-    ```
+:::
 
 ### One-to-one
 
@@ -124,7 +150,7 @@ curl https://api.acme.com/authors/1
     {
       "id": 100,
       "title": "How to handle relationships in REST APIs",
-      "content": "In this blog post, we will explore how to handle relationships between different entities in a RESTful API..."
+      "content": "Lorem ipsum ..."
     },
     {
       "id": 101,
@@ -194,7 +220,7 @@ curl https://api.acme.com/posts/100
 {
   "id": 100,
   "title": "How to handle relationships in REST APIs",
-  "content": "In this blog post, we will explore how to handle relationships between different entities in a RESTful API...",
+  "content": "Lorem ipsum ...",
   "_links": {
     "self": {
       "href": "https://api.acme.com/posts/100"
@@ -230,3 +256,6 @@ curl https://api.acme.com/posts-tags
   }
 ]
 ```
+
+[^1]  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
+[^2]  https://stateless.co/hal_specification.html
