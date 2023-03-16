@@ -8,7 +8,7 @@ REST resources can be created using one of two `HTTP` methods, `POST` or `PUT`.
 
 The main difference between the two is that:
 
-* `POST` is used to create a new resource under a collection of such resources[^1], whereas `PUT` is used to create or update a resource with a specific identifier[^2] (under premise that the client is allowed to choose the identifier)
+* `POST` is used to create a new resource under a collection of such resources[^1], whereas `PUT` is used to create or replace a resource with a specific identifier[^2] (under premise that the client is allowed to choose the identifier)
 * `POST` is not idempotent, whereas `PUT` is idempotent
 
 Let's illustrate this with an example of creating a new `order` resource.
