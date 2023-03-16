@@ -6,10 +6,27 @@ sidebar_position: 1
 
 ## Platform independence
 
-REST APIs are designed to work across different platforms because they use standard protocols like `HTTP` and `HTTPS`. They communicate using common data exchange formats like `JSON` and `XML`.
-`JSON` is more commonly used because it’s lightweight and easy to read.
+REST APIs are designed to work across different platforms because they use standard protocols like `HTTP`.
+As it can be seen on the image below, the only requirement that REST imposes is reliance on HTTP.
 
 ![Platform agnostic](./img/platform-agnostic.png)
+
+This brings the following benefits:
+
+* Evolution of server-side independent of API clients:
+
+  The only thing that matters to the API client is the API contract. As long as the API contract is in place, the implementors of
+  the server-side can undergo any kind of change, no matter how major it is: migrating to another cloud, changing Database, programming
+  language, etc.
+* Rich ecosystem of clients
+
+  Initial version being developed at the beginning of 90s, HTTP has been there long enough to be supported by a wide range of tools,
+  programming languages, libraries, etc. This means that there's a low barrier to start writing clients for your APIs.
+
+* Performance
+
+  HTTP leverages caching, compression, and other techniques to improve performance. This reduces the strain on the backend side, reduces the bandwidth usage,
+  allows for retries in case of unstable network (relying on HTTP methods idempotency), etc.
 
 ## Statelessness
 
