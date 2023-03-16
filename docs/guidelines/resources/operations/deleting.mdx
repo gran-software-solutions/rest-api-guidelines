@@ -1,7 +1,37 @@
 ---
 sidebar_position: 2
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Deleting REST Resources
+Deleting REST resources is accomplished by sending a `DELETE` request to the resource's `URI`.
 
-**TODO**
+As `DELETE` is considered an idempotent method (more [here](/docs/guidelines/advanced/idemptency-and-safety)), it's safe to send multiple requests. It's important to note that
+the response status may change from `204 No Content` for the initial call, to `404 Not Found` for subsequent calls.
+An example of a `DELETE` request is shown below:
+
+<Tabs>
+<TabItem value="initial 204" label="Initial DELETE">
+
+```http
+DELETE /posts/1 HTTP/1.1
+Host: api.acme.com
+Accept: application/json
+
+HTTP/1.1 204 No Content
+```
+
+</TabItem>
+<TabItem value="subsequent-404" label="Subsequent DELETE">
+
+```http
+DELETE /posts/1 HTTP/1.1
+Host: api.acme.com
+Accept: application/json
+
+HTTP/1.1 404 Not Found
+```
+
+</TabItem>
+</Tabs>
