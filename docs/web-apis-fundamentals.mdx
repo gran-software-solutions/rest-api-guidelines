@@ -38,9 +38,9 @@ is similar to a `key` in the map, where that map is stored in the server's memor
 Some examples of state:
 
 * Authentication information (session identifier, JWT, etc.)
-* Shopping cart information
-* User preferences
-* Multi-step form progress
+* Shopping cart information - items added to cart, calculated totals, etc.
+* User preferences - remembering choices such as language, currency, etc
+* Multistep wizard progress - allowing user to go back and forth
 
 By not having any kind of session state on the server, we can easily increase the backend performance by adding more instances, and load balancing between them.
 Session state is considered a bad practice. Nevertheless, using tools such as Redis, Memcached, or Hazelcast, we can synchronize the session state across instances,
