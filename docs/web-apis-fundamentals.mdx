@@ -30,8 +30,21 @@ This brings the following benefits:
 
 ## Statelessness
 
-REST APIs are stateless, meaning the server doesn't store any client state (in the instance's memory, local file system, etc.). This way there's no need for any kind of session stickiness.
-This means that any server instance where the request lands can fulfill the request. This also means that the server can increase the performance by adding more instances, and load balancing between them.
+REST APIs are stateless, meaning the server doesn't store any client state (in the instance's memory, local file system, etc.).
+By state, we mean any kind of information particular to a client. Such state is usually created during the authentication process, where the server
+generates a cookie that is sent back to the client, which is always sent back to the server. The information contained in the cookie is a session identifier, which
+is similar to a `key` in the map, where that map is stored in the server's memory, and the `value` mapped to that `key` can be any arbitrary information.
+
+Some examples of state:
+
+* Authentication information (session identifier, JWT, etc.)
+* Shopping cart information
+* User preferences
+* Multi-step form progress
+
+By not having any kind of session state on the server, we can easily increase the backend performance by adding more instances, and load balancing between them.
+Session state is considered a bad practice. Nevertheless, using tools such as Redis, Memcached, or Hazelcast, we can synchronize the session state across instances,
+which increase the complexity of the application, and make it more difficult to scale (synchronization takes longer and is more brittle with more nodes).
 
 ## Consumer driven contracts
 
