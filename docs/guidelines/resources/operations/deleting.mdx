@@ -35,3 +35,14 @@ HTTP/1.1 404 Not Found
 
 </TabItem>
 </Tabs>
+
+### Deleting collection resources
+
+It's not that common to delete a collection resource. However, if you plan to have such an API, you can consider the following:
+
+* To be on the safe side, (as this might be a time-consuming operation depending on the amount of data to be deleted, the semantics and complexity of the resource deletion, and the performance of the underlying persistence engine), consider designing it in an asynchronous way.
+Return the `202 Accepted` response status, and provide a `Location` header pointing to the resource that will be used to track the progress of the operation.
+
+* In case the collection to delete was empty, return the `204 No Content` response status.
+
+* Consider having some filter on resources to be deleted, by having something like `?filter=lastAccessed lt 2017-07-21T17:32:28Z` query parameter. This will allow the client to delete only a subset of the collection resources.
