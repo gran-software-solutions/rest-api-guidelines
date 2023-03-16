@@ -67,6 +67,7 @@ const config = {
         ({
             // Replace with your project's social card
             image: 'img/docusaurus-social-card.jpg',
+            zoom: {},
             navbar: {
                 title: 'GRAN REST API Guidelines',
                 logo: {
@@ -126,6 +127,7 @@ const config = {
                 darkTheme: require('prism-react-renderer/themes/palenight'),
             },
         }),
+    plugins: [require.resolve("docusaurus-plugin-image-zoom")],
     themes: [
         [
             "@easyops-cn/docusaurus-search-local",
