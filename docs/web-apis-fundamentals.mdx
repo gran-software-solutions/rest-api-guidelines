@@ -7,6 +7,11 @@ sidebar_position: 1
 ## Platform independence
 
 REST APIs are designed to work across different platforms because they use standard protocols like `HTTP`.
+
+:::tip
+Read [here](/docs/guidelines/advanced/rest-alternatives) for more information on how REST stacks up against other HTTP APIs
+:::
+
 As it can be seen on the image below, the only requirement that REST imposes is reliance on HTTP.
 
 ![Platform agnostic](./img/platform-agnostic.png)
@@ -46,11 +51,11 @@ By not having any kind of session state on the server, we can easily increase th
 Session state is considered a bad practice. Nevertheless, using tools such as Redis, Memcached, or Hazelcast, we can synchronize the session state across instances,
 which increase the complexity of the application, and make it more difficult to scale (synchronization takes longer and is more brittle with more nodes).
 
-## Consumer driven contracts
+## Outside-In API mindset
 
-Knowing what clients exactly expect from your API is crucial to building a successful API. Consumer driven contracts are a way to define clear expectations between the API provider and the consumer.
-Only when the API provider and the consumer agree on the contract, the API can be built. This ensures that the API is built to meet the consumer’s needs. Nevertheless, it's important to keep your
-APIs extensible and flexible to allow for future changes, and allow for increased adoption.
+Google has published an [e-book](https://cloud.google.com/files/apigee/apigee-api-product-mindset-ebook.pdf) describing the benefits of focusing on Outside-In instead of Inside-Out API design. Outside-in
+means that you start with the client, and design the API to meet the client's needs. Inside-out means that you start with the server, and design the API to meet the server's needs. In short, unless you talked
+to your clients, the chances are you will not understand the problem they would like to solve with your API.
 
 ## API evolution through backwards compatibility
 
@@ -59,6 +64,12 @@ Clients of your APIs are busy building their own products and are not always abl
 
 Big companies like Google advocate that you should not do versioning of your APIs. This implies that it will be hard to fix bad API design decisions in the future. It's important to think hard when designing
 an initial API version.
+
+:::tip Consumer Driven Contract (CDC) testing
+CDC testing can help to ensure that the API changes made are backward compatible. In short, the client is responsible for formally defining the expectations when calling the API. These expectations
+are becoming part of the API provider's test suite pipeline. If the API provider changes the API in a way that breaks the client's expectations, the test suite will fail, and the API provider won't be able to deploy the changes.
+One tool that can help with this is [Pact](https://pact.io/).
+:::
 
 ## Design for simplicity, intuitiveness, flexibility and consistency
 
