@@ -4,6 +4,8 @@ sidebar_position: 3
 
 # REST alternatives
 
+**TODO**
+
 ## REST vs gRPC
 
 * Guidelines vs. Rules:
