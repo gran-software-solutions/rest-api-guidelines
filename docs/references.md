@@ -13,3 +13,5 @@ sidebar_position: 4
 * [Best Practices for Designing a Pragmatic RESTful API](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 * [How to GET a Cup of Coffee](https://www.infoq.com/articles/webber-rest-workflow/)
 * [REST API Design](https://www.mscharhag.com/p/rest-api-design)
+* [When Is A Change A Breaking Change For An API](https://www.bennadel.com/blog/3501-when-is-a-change-a-breaking-change-for-an-api.htm)
+* [About breaking changes in the REST API](https://docs.github.com/en/rest/overview/breaking-changes?apiVersion=2022-11-28#about-breaking-changes-in-the-rest-api)
