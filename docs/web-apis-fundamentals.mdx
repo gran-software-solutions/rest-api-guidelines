@@ -66,6 +66,13 @@ to your clients, the chances are you will not understand the problem they would 
 REST APIs are designed to be backwards compatible. This means that the API can be modified without breaking existing clients. This is important since more often than not, clients are not under your control.
 Clients of your APIs are busy building their own products and are not always able to upgrade to the latest version of your API, due to lack of interest or time.
 
+:::tip
+Which changes are considered breaking changes? Read [here](https://docs.github.com/en/rest/overview/breaking-changes?apiVersion=2022-11-28#about-breaking-changes-in-the-rest-api)
+and [here](https://www.bennadel.com/blog/3501-when-is-a-change-a-breaking-change-for-an-api.htm)
+
+In case backward compatibility must be broken, learn how you can [version your APIs](/docs/guidelines/advanced/api-versioning).
+:::
+
 Big companies like Google advocate that you should not do versioning of your APIs. This implies that it will be hard to fix bad API design decisions in the future. It's important to think hard when designing
 an initial API version.
 
