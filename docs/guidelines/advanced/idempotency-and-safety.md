@@ -10,7 +10,7 @@ same as the effect for a single such request[^1].
 :::
 
 :::tip Safety definition
-A HTTP method is considered "safe" if it does not change the state of the server[^2].
+An HTTP method is considered "safe" if it does not change the state of the server[^2].
 :::
 
 ## Idempotency
@@ -23,7 +23,7 @@ be the same for the same request. For instance, deleting a user will product `20
 
 ## Safety
 
-Regarding safety property, it's important to mention that some state can be changed on the server, such as updating the cache after reading resources from database, producing server logs, updating API access statistics, etc. These state changes are not requested by the client, but are a side effect of the
+Regarding safety property, it's important to mention that some state can be changed on the server, such as updating the cache after reading resources from the database, producing server logs, updating API access statistics, etc. These state changes are not requested by the client but are a side effect of the
 request.
 
 HTTP method safety allows the clients to **cache responses**. Knowing that there are no state changes on the server side, the client can pre-fetch resources and cache them,
