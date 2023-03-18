@@ -4,7 +4,8 @@ sidebar_position: 3
 
 # REST alternatives
 
-**TODO**
+:::warning FINISH OFF THIS ARTICLE
+:::
 
 ## REST vs gRPC
 
