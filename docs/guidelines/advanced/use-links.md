@@ -4,4 +4,74 @@ sidebar_position: 2
 
 # Use links (Hypermedia)
 
-TODO
+Links are rarely used, but a very powerful feature of an API. According to the Richardson Maturity Model, they
+represent the final stage of maturity. They:
+
+* Allow you to navigate the API
+* Can transform your API to a state machine (more on that soon)
+* Remove the logic on how to build links from the client (more on that soon)
+
+:::caution
+Links only make sense **if your clients plan to use them**. If you don't plan to use them, don't provide them,
+since this is a **significant implementation burden** on the server side.
+:::
+
+## How to implement links?
+
+Unfortunately, there is no standard for links in REST APIs. There are several ways to implement them ([HAL](http://stateless.co/hal_specification.html),
+[JSON LD](https://json-ld.org/) and more). The most libraries use the HAL format, so we will use it as an example.
+
+### HAL
+
+HAL provides two types of links: **_embedded** and **_links**. Let's see how to use them:
+
+```http
+GET /api/users/1 HTTP/1.1
+Host: api.acme.com
+Accept: application/hal+json
+
+HTTP/1.1 200 OK
+
+{
+    "id": 1,
+    "username": "john",
+    "email": "john@doe.com"
+    "_embedded": {
+        "orders": [
+            {
+                "id": 1,
+                "total": 100,
+                "_links": {
+                    "self": {
+                        "href": "https://api.acme.com/users/1/orders/1"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.acme.com/users/1"
+        },
+        "orders": {
+            "href": "https://api.acme.com/users/1/orders"
+        }
+    }
+}
+```
+In the example given, we have a user with an embedded list of orders. The user has a link to his orders, and each order has a link to itself.
+
+### Link header
+
+Another (less flexible way) to implement links is to use the `Link` [header](https://developer.mozilla.org/en-US/docs/web/http/headers/link)
+This approach is more aligned with HTTP standard, but it is less flexible and less common. We advise you **not to use it**.
+
+## Links as a state machine
+
+**TODO**
+
+## Links for API discovery
+
+`GET /`
+
+**TODO**
