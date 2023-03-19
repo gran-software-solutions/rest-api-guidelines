@@ -62,6 +62,11 @@ Content-Type: application/json
 </TabItem>
 </Tabs>
 
+:::caution
+In case of a collection resource retrieval, make sure that pagination is used. This is to prevent both the server and the client from being overloaded with a large number of resources.
+More info [here](/docs/guidelines/resources/working-with-collections/pagination)
+:::caution
+
 ## Improving performance and reducing server load
 
 In many cases, APIs are read-heavy. This can (depending on a scale) put burden on the server. To improve performance, and reduce the load on the server, use [caching](/docs/guidelines/advanced/caching-responses)
