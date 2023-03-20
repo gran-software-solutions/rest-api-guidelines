@@ -15,8 +15,9 @@ represent the final stage of maturity. They:
 Links only make sense **if your clients plan to use them**. If you don't plan to use them, don't provide them,
 since this is a **significant implementation burden** on the server side.
 
-Why is it so? Because you need to be able to fetch all the needed data
-in order to build all the links. Additionally, we should not serve the links back to the client that's not authorized to execute them.
+Why is it so? Because you need to be able to fetch all the needed data in order to build all the links. Additionally,
+we should not serve the links back to the client that's not authorized to execute them. On top of that, by introducing links,
+we also increase the payload size of the response.
 :::
 
 ## How to implement links?
