@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Get started
 
-Welcome to GRAN Software Solutions Rest API guidelines.
+Welcome to GRAN Software Solutions REST API guidelines.
 
 The idea behind this Website is to provide a set of guidelines for development of REST APIs.
 

@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
         Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
         description: (
             <>
-                Building a Rest API requires solid foundations. From Outside-In thinking, to the principles of
+                Building a REST API requires solid foundations. From Outside-In thinking, to the principles of
                 simplicity, consistency and flexibility. Learn how to build APIs others will love.
                 Read about <a className={styles.link} href="docs/web-apis-fundamentals">Web API fundamentals</a>
             </>
