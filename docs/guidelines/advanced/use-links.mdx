@@ -26,7 +26,7 @@ Unfortunately, there is no standard for links in REST APIs. There are several wa
 HAL provides two types of links: **_embedded** and **_links**. Let's see how to use them:
 
 ```http
-GET /users/1 HTTP/1.1
+GET /users/1?embed=orders HTTP/1.1
 Host: api.acme.com
 Accept: application/hal+json
 
@@ -59,19 +59,89 @@ HTTP/1.1 200 OK
     }
 }
 ```
-In the example given, we have a user with an embedded list of orders. The user has a link to his orders, and each order has a link to itself.
+
+In the example given, for the given user `/users/1`, we have requested a `user` with an embedded list of `orders`(Read more about embedding in the [Embedding](/docs/guidelines/advanced/embedding-resources) section).
+At the `user` level, we have two links:
+
+* `self` - a link to the user itself, consider a good practice (we can use it to re-fetch the user, if needed)
+* `orders` - a link to the user's orders
+
+Each `order` in `_embedded.orders` collection contains a link to itself (`self`).
 
 ### Link header
 
 Another (less flexible way) to implement links is to use the `Link` [header](https://developer.mozilla.org/en-US/docs/web/http/headers/link)
-This approach is more aligned with HTTP standard, but it is less flexible and less common. We advise you **not to use it**.
+This approach is more aligned with HTTP standard, but it is less flexible and less common.
+
+What are the disadvantages of using the `Link` header?
+
+* It is not possible to provide links to embedded resources
+* It's more cumbersome to encode/decode links
+
+We advise you **not to use it**.
 
 ## Links as a state machine
 
-**TODO**
+One of the most powerful features of links is that they can be used to transform your API to a state machine.
+Let's ilustrate it with an example:
+
+```http
+GET /users/1/orders/2 HTTP/1.1
+Host: api.acme.com
+Accept: application/hal+json
+
+HTTP/1.1 200 OK
+
+{
+    "id": 2,
+    "total": 100,
+    "status": "pending",
+    "_links": {
+        "self": {
+            "href": "https://api.acme.com/users/1/orders/2"
+        },
+        "pay": {
+            "href": "https://api.acme.com/users/1/orders/2/pay"
+        },
+        "cancel": {
+            "href": "https://api.acme.com/users/1/orders/2/cancel"
+        }
+    }
+}
+```
+
+In the example given, we have an order with a `pending` status. The `pay` and `cancel` links are available, for us to take an action.
+If we call the `pay` link, the order will be paid and the `pay` link will be removed from the response the next time we fetch the same order again.
+The `cancel` link may still be available, depending on the order's status.
 
 ## Links for API discovery
 
-`GET /`
+Links can also be used to discover the API. For example, if we have a `GET /` endpoint, we can return a list of links to the API's resources:
 
-**TODO**
+```http
+GET / HTTP/1.1
+Host: api.acme.com
+Accept: application/hal+json
+
+HTTP/1.1 200 OK
+
+{
+    "version": "1.0.0",
+    "name": "Acme API",
+    "description": "Acme API",
+    "_links": {
+        "self": {
+            "href": "https://api.acme.com/"
+        },
+        "users": {
+            "href": "https://api.acme.com/users"
+        },
+        "orders": {
+            "href": "https://api.acme.com/orders"
+        }
+    }
+}
+```
+
+Even if you don't plan to use links, it is a good practice to provide them at the root level, since they can be used for API discovery, helping your clients to
+understand the basic structure of your API.
