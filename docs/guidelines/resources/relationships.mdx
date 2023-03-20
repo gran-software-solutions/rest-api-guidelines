@@ -1,0 +1,261 @@
+---
+sidebar_position: 3
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Resources relationships
+
+A relationship is a connection or association between two or more resources. For example, an `author` can have many `post`s,
+a `post` can have many `comment`s, and a `comment` can belong to one `author`. These are examples of different types of relationships
+that we can define in our blogging domain.
+
+There are different ways to handle relationships in a RESTful API, depending on how we want to expose our resources and how we want to manipulate them. Some common approaches are:
+
+* **Embedding**: Embedding means including the related resources as part of the representation of another resource. For example, we can embed the `comment`s of a `post` as an array inside the representation of the `post` resource.
+This approach reduces the number of requests needed to fetch all the related resources, but it also increases the size of the response and may include unnecessary data.
+* **Linking**: Linking means providing references or links to the related resources as part of the representation of another resource. For example, we can link the `author` of a `post` by providing their URI as an attribute inside
+the representation of the `post` resource. This approach reduces the size of the response and allows more flexibility in choosing which related resources to fetch, but it also increases the number of requests needed to access
+all the related resources.
+* **Association Resources**: Association resources are special resources that represent the relationship itself as a first-class entity. For example, we can create an `users-posts` resource for each pair of `author`s and `post`s that
+are related. This approach allows more control over how to create, update, and delete relationships between resources, but it also adds more complexity and overhead to the API design.
+
+## Handling cardinalities
+
+A cardinality is a measure of how many instances of one entity are related to one instance of another entity. There are three main types of cardinalities that we can encounter in our blogging domain:
+
+* **One-to-one**: A one-to-one relationship means that each instance of one entity is related to exactly one instance of another entity. For example, each `author` can have one `profile picture`.
+* **One-to-many**: A one-to-many relationship means that each instance of one entity is related to zero or more instances of another entity. For example, each `author` can have many `post`s.
+* **Many-to-many**: A many-to-many relationship means that each instance of one entity is related to zero or more instances of another entity, and vice versa. For example, each `post` can have many `tag`s, and each `tag` can belong to many `post`s.
+
+Depending on how we choose to handle relationships in our RESTful API (embedding, linking, or association resources), we may need different strategies for dealing with different cardinalities.
+
+:::info Expressing relations using HTTP `Link` headers or `_link` `JSON` attribute
+
+In REST, we can express relationships between resources in various way, out of which we find 2 particularly interesting:
+
+* Using HTTP `Link` headers[^1]
+
+  The `Link` header is a comma-separated list of links, where each link is represented by a URI enclosed in angle brackets, followed by a semicolon, followed by a `rel` attribute that describes the relationship between the resource and the target URI.
+  We prefer this approach for two reasons:
+  * It keeps the response representation clean and simple, not cluttered with `_links` attribute
+  * It relies on the HTTP protocol, with which most developers are already familiar
+
+* Using `_links` JSON attribute[^2]
+
+  Most of the projects that use hypermedia, tend to (for some reason) use `_links` attribute. It might be because it's easier
+  to parse and use at the client side. We recommend using `_links` and not `links` to avoid conflicts in cases resource contains `links`
+  (not hypermedia) attribute itself.
+
+<Tabs>
+<TabItem value="header" label="Link header">
+
+```http
+GET https://api.acme.com/posts/1
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+Link: <https://api.acme.com/authors/1>; rel="author", <https://api.acme.com/posts/1/tags>; rel="tags"
+
+{
+    "id": 1,
+    "title": "How to handle relationships in REST APIs",
+    "content": "Lorem ipsum ..."
+}
+```
+
+</TabItem>
+<TabItem value="json" label="_links attribute">
+
+```http
+GET https://api.acme.com/posts/1
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "How to handle relationships in REST APIs",
+  "content": "Lorem ipsum ...",
+  "_links": {
+    "author": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "tags": {
+      "href": "https://api.acme.com/posts/1/tags"
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+:::
+
+### One-to-one
+
+For one-to-one relationships, we can use either embedding or linking as our preferred approach.
+
+If we use embedding, we can include the related resource as an attribute inside
+the representation of another resource. For example:
+
+```bash
+curl https://api.acme.com/authors/1
+{
+  "id": 1,
+  "name": "Alice",
+  "profilePicture": {
+    "id": 10,
+    "url": "https://api.acme.com/images/10.jpg"
+  },
+  "href": "https://api.acme.com/authors/1
+}
+```
+
+If we use linking, we can provide a reference or a link to the related resource as a `_links` attribute inside the representation of another resource. For example:
+
+```bash
+curl https://api.acme.com/authors/1
+
+{
+  "id": 1,
+  "name": "Alice",
+  "_links": {
+    "self": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "profilePicture": {
+      "href": "https://api.acme.com/profile-pictures/10"
+    }
+  }
+}
+```
+
+### One-to-many
+
+For one-to-many relationships, we can use either embedding, linking, or association resources as our preferred approach.
+
+If we use embedding, we can include the related resources as an array inside the representation of another resource. For example:
+
+```bash
+curl https://api.acme.com/authors/1
+
+{
+  "id": 1,
+  "name": "Alice",
+  "posts": [
+    {
+      "id": 100,
+      "title": "How to handle relationships in REST APIs",
+      "content": "Lorem ipsum ..."
+    },
+    {
+      "id": 101,
+      "title": "Why you should use JSON for your RESTful API",
+      "content": "JSON is a popular format for exchanging data between the client and the server in a RESTful API..."
+    }
+  ]
+}
+```
+
+If we use linking, we can provide a reference or a link to the related resources as an attribute inside the representation of another resource. For example:
+
+```bash
+curl https://api.acme.com/authors/1
+
+{
+  "id": 1,
+  "name": "Alice",
+  "_links": {
+    "self": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "posts": {
+      "href": "https://api.acme.com/authors/1/posts"
+    }
+  }
+}
+```
+
+If we use association resources, we can create a separate resource that represents the relationship between an author and a post. For example:
+
+```bash
+curl https://api.acme.com/authors-posts
+
+[
+  {
+    "author": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "post": {
+      "href": "https://api.acme.com/posts/100"
+    }
+  },
+  {
+    "author": {
+      "href": "https://api.acme.com/authors/1"
+    },
+    "post": {
+      "href": "https://api.acme.com/posts/101"
+    }
+  }
+]
+```
+
+We can then access the author and the post resources by following the links.
+
+### Many-to-many
+
+For many-to-many relationships, we can use either linking or association resources as our preferred approach.
+
+If we use linking, we can provide a reference or a link to the related resources as an attribute inside the representation of another resource. For example:
+
+```bash
+
+curl https://api.acme.com/posts/100
+
+{
+  "id": 100,
+  "title": "How to handle relationships in REST APIs",
+  "content": "Lorem ipsum ...",
+  "_links": {
+    "self": {
+      "href": "https://api.acme.com/posts/100"
+    },
+    "tags": {
+      "href": "https://api.acme.com/posts/100/tags"
+    }
+  }
+}
+```
+
+If we use association resources, we can create a separate resource that represents the relationship between a post and a tag. For example:
+
+```bash
+curl https://api.acme.com/posts-tags
+
+[
+  {
+    "post": {
+      "href": "https://api.acme.com/posts/100"
+    },
+    "tag": {
+      "href": "https://api.acme.com/tags/1"
+    }
+  },
+  {
+    "post": {
+      "href": "https://api.acme.com/posts/100"
+    },
+    "tag": {
+      "href": "https://api.acme.com/tags/2"
+    }
+  }
+]
+```
+
+[^1]  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
+[^2]  https://stateless.co/hal_specification.html

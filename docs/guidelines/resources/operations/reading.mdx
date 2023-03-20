@@ -1,0 +1,74 @@
+---
+sidebar_position: 2
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Reading REST Resources
+
+Reading REST resources is performed by sending a `GET` request to a `URI` under which the resource is located.
+The format of the response depends on the `Accept` header of the request. This process of agreeing on the format of the
+response is called content negotiation.[^1]
+
+There is no difference between retrieving a single resource and retrieving a collection of resources. The only difference
+is the URI under which the resource is located.
+
+<Tabs>
+<TabItem value="singleton" label="Reading a singleton resource">
+
+```http
+GET /posts/1 HTTP/1.1
+HOST: api.acme.com
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+
+{
+    "id": 1,
+    "title": "How to do REST APIs",
+    "content": "Foo bar..."
+}
+```
+
+</TabItem>
+<TabItem value="collection" label="Reading a collection resource">
+
+```http
+GET /posts HTTP/1.1
+HOST: api.acme.com
+Accept: application/json
+
+200 OK
+Content-Type: application/json
+
+{
+    "count": 2,
+    "items": [
+        {
+            "id": 1,
+            "title": "How to do REST APIs",
+            "content": "Foo bar..."
+        },
+        {
+            "id": 2,
+            "title": "How to do REST APIs",
+            "content": "Foo bar..."
+        }
+    ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+:::caution
+In case of a collection resource retrieval, make sure that pagination is used. This is to prevent both the server and the client from being overloaded with a large number of resources.
+More info [here](/docs/guidelines/resources/working-with-collections/pagination)
+:::caution
+
+## Improving performance and reducing server load
+
+In many cases, APIs are read-heavy. This can (depending on a scale) put burden on the server. To improve performance, and reduce the load on the server, use [caching](/docs/guidelines/advanced/caching-responses)
+
+[^1]: [Content Negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation)

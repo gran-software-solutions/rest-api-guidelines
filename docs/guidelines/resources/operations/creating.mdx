@@ -1,0 +1,99 @@
+---
+sidebar_position: 1
+---
+
+# Creating REST Resources
+
+REST resources can be created using one of two `HTTP` methods, `POST` or `PUT`.
+
+The main difference between the two is that:
+
+* `POST` is used to create a new resource under a collection of such resources[^1], whereas `PUT` is used to create or replace a resource with a specific identifier[^2] (under premise that the client is allowed to choose the identifier)
+* `POST` is not idempotent, whereas `PUT` is idempotent
+
+Let's illustrate this with an example of creating a new `order` resource.
+
+## Creating a REST Resource with POST
+
+```http
+POST https://api.acme.com/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product": "Item 1",
+      "quantity": 1
+    },
+    {
+      "product": "Item 2",
+      "quantity": 2
+    }
+  ]
+}
+
+HTTP/1.1 201 Created
+Location: https://api.acme.com/orders/123
+Content-Type: application/json
+
+```
+
+Couple of important things to note here:
+
+* The `POST` request is sent to the `orders` resource, under which we create a new "subordinate" resource
+* The `Content-Type` header is set to `application/json` to indicate that the request body is in JSON format
+* The new resource is `JSON` encoded in the request body
+* The server should respond with `201 Created` status code
+* The response should contain a `Location` header with the URL of the newly created resource
+* The response also contains media type information in the `Content-Type` header
+
+:::caution
+The `POST` method is not idempotent. As a consequence, repeating the same request multiple times may result in multiple resources being created.
+:::
+
+## Creating a REST Resource with PUT
+
+```http
+PUT https://api.acme.com/orders/123 HTTP/1.1
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product": "Item 1",
+      "quantity": 1
+    },
+    {
+      "product": "Item 2",
+      "quantity": 2
+    }
+  ]
+}
+
+HTTP/1.1 201 OK
+Location: https://api.acme.com/orders/123
+Content-Type: application/json
+
+```
+
+Couple of important things to note here:
+
+* The `PUT` request is sent to the `orders` resource, with the resource identifier `123`
+* The `Content-Type` header is set to `application/json` to indicate that the request body is in JSON format
+* The new resource is `JSON` encoded in the request body
+* The server should respond with `201 Created` status code
+* The response should contain a `Location` header with the URL of the newly created resource
+
+:::tip
+The `PUT` method is idempotent. As a consequence, repeating the same request multiple times will have
+the same effect as sending it just once. Bare in mind that the response status code may vary (the first time
+we get `201 Created`, the second time `200 OK` or `204 No Content`).
+:::
+
+## Controlling response via `Prefer` Header
+
+Client may like to include / exclude generated resource representation in the response body by setting the `Prefer` header to `return=representation` or `return=minimal`.
+More about this in the [Prefer Header](/docs/guidelines/advanced/prefer-header) section.
+
+[^1]: https://www.rfc-editor.org/rfc/rfc2616#section-9.5
+[^2]: https://www.rfc-editor.org/rfc/rfc2616#section-9.6

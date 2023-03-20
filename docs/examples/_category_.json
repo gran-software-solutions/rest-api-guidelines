@@ -1,0 +1,8 @@
+{
+  "label": "Example APIs",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Series of made-up examples to demonstrate how to design Rest APIs",
+  }
+}

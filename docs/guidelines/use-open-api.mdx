@@ -1,0 +1,66 @@
+---
+sidebar_position: 1
+---
+
+# Use OpenAPI
+
+[OpenAPI](https://www.openapis.org/) is a human and machine-readable specification for describing, producing and consuming REST APIs.
+It provides a common understanding of the API for both the producer and consumer.
+
+It is an engineering community standard with high adoption, backed by some big companies, such as Google, Microsoft, Twitter, Netflix and IBM[^1], with massive adoption and tooling support (client and server code generation, documentation, testing, mocking, etc).
+
+It offers a concise way to describe endpoints, parameters, requests and responses, security, and [more](https://spec.openapis.org/oas/v3.1.0#version-3-1-0).
+Technically, it is a `JSON` or `YAML` file that describes the API.
+
+An example of an OpenAPI specification for an API for user management (saving and reading users):
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Simple API overview
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Returns a list of users.
+      responses:
+        '200':
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a user
+      requestBody:
+        description: User to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+```
+
+On the other hand, OpenAPI comes with a learning curve, in case of complex APIs it can get verbose (can be solved by using external files for common definitions).
+The specification is tied to REST APIs, meaning that if you have a GraphQL, gRPC or WebSocket API, you may have difficulties to describe it with OpenAPI.
+
+:::tip
+Examples of OpenAPI specifications you can find [here](/docs/category/example-apis)
+:::
+
+[^1]: [OpenAPI members](https://www.openapis.org/membership/members)

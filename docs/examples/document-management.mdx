@@ -1,0 +1,27 @@
+---
+sidebar_position: 1
+---
+import CodeBlock from '@theme/CodeBlock';
+import MyComponentSource from '!!raw-loader!./document-management.yaml';
+
+# Document Management API
+
+Let's create an API for managing documents. Here are the requirements:
+
+| API Operation                                               | Description                                                                                                                                                            | Implemented?       |
+|-------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
+| Upload a document with its metadata (description, and tags) | Upload a document alongside metadata                                                                                                                                   | :heavy_check_mark: |
+| List all uploaded documents                                 | Ability to list all the documents uploaded by the user<br/>Documents need to be able to be filtered by tag and description<br/>Pagination and sorting must be provided | :heavy_check_mark: |
+| Download a document                                         | Ability to download a doc by it's identifier                                                                                                                           | :heavy_check_mark: |
+| Retrieve metadata of a document                             | Ability to get a metadata of a document                                                                                                                                | :heavy_check_mark: |
+| Update metadata of a document                               | Ability to modify existing document metadata                                                                                                                           | :heavy_check_mark: |
+| Delete a document                                           | Ability to delete existing document                                                                                                                                    | :heavy_check_mark: |
+| Converts a document to pdf                                  | Ability to convert existing document to pdf                                                                                                                            | :heavy_check_mark: |
+
+
+## OpenAPI Specification
+
+<details>
+    <summary>document-management.yaml</summary>
+    <CodeBlock language="yaml">{MyComponentSource}</CodeBlock>
+</details>

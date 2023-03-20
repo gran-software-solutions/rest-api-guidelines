@@ -1,0 +1,60 @@
+---
+sidebar_position: 2
+---
+
+# Specify the data you need - `select`
+
+To be able to design for flexibility, we need ability to specify the shape of the data needed. From case to case, the clients of our APIs
+will need different data. To account for this, we propose using `select` query parameter.
+
+Let's come up with an example. Say we have a `user` resource. The `JSON` representation of a user looks like this:
+
+```json
+{
+  "id": "123",
+  "name": "John Doe",
+  "email": "john@doe.com"
+}
+```
+
+The simplest case of `select` would be to specify the fields we want to get back. For example, if we want to get only the `id` and `name` fields, we would do:
+
+```bash title="Selected base user fields"
+curl -H 'Accept: application/json' https://api.acme.com/users/123?select=id,name
+```
+
+```json title="Response"
+{
+  "id": "123",
+  "name": "John Doe"
+}
+```
+
+Let's suppose we want to include the related `posts` of the user. A `post` resource looks like this:
+
+```json title="Sample post"
+{
+  "id": "456",
+  "title": "My first post",
+  "body": "This is my first post"
+}
+```
+
+Let's imagine we want, on top of previous example, to get the `id` and `title` of the `posts` of the user. We would do:
+
+```bash title="Selected additional related fields"
+curl -H 'Accept: application/json' https://api.acme.com/users/123?select=id,name,posts.id,posts.title
+```
+
+```json title="Response"
+{
+  "id":"123",
+  "name": "John Doe",
+  "posts": [
+    {
+      "id": "456",
+      "title": "My first post"
+    }
+  ]
+}
+```

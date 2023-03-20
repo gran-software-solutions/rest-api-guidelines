@@ -1,0 +1,100 @@
+---
+sidebar_position: 2
+---
+
+# About REST Resources
+
+Rest resources represent your business domain. They are modelled as nouns. For example, if you are developing a blog RestAPI, you will have `blog`, `post`, `comment`, `user`, `tag` and so on.
+If you are in an e-commerce domain, you will have `category`, `order`, `product` and so on.
+
+There are two types of resources: `collections` and `singletons`.
+
+Collections are a way of grouping resources of the same type, for example `users` (grouped `user` type resources) or `posts` (`post` type resources).
+
+A resource that lives outside a collection is called a `singleton` resource. An example of a `singleton` resource would be a `profile`.
+
+Collections can "live" at the top of your APIs and/or be nested within a resource. For example, you can have a `books` collection resource at the root of your API (listing all the books), but also a `/users/:user/books` collection sub-resource
+(books that belong to a particular user).
+
+### URL Structure
+
+Each resource has its own URL. URLs are organized hierarchically. At the root of your API you will have `/` URL,
+where you can list all available collections and singletons. You can also add some API metadata, like versioning, some operational status, etc.
+One example of how it may look like:
+
+```bash title="GET https://api.acme.com/"
+curl -H 'Accept: application/json' https://api.acme.com/
+```
+
+```json title="Response"
+{
+  "version": "1.0.0",
+  "status": "ok",
+  "collections": [
+    "users",
+    "posts",
+    "comments"
+  ],
+  "singletons": [
+    "profile"
+  ]
+}
+```
+
+`users` collection can be accessed via `https://api.acme.com/users` URL. `profile` singleton can be accessed via `https://api.acme.com/profile` URL.
+
+Sub-resources (e.g `books` belonging to a `user`) can be accessed via `https://api.acme.com/users/:user/books` URL.
+
+### HTTP Methods
+
+The most commonly used HTTP methods are:
+
+| Method  | Scope        | Description                                |
+|---------|--------------|--------------------------------------------|
+| GET     | `collection` | List all resources in a collection         |
+| GET     | `resource`   | Get a single resource                      |
+| HEAD    | `collection` | Same as GET, but without the response body |
+| HEAD    | `resource`   | Same as GET, but without the response body |
+| POST    | `collection` | Create a new resource                      |
+| PUT     | `resource`   | Update a resource                          |
+| PATCH   | `resource`   | Partially update a resource                |
+| DELETE  | `resource`   | Delete a resource                          |
+| OPTIONS | `any`        | Get information about the resource         |
+
+:::tip
+* `HEAD` method can give you the same info you would get from `GET`, but without the response body. This is useful
+for getting caching info, content-type and other headers, etc.
+* `OPTIONS` method provides info about which methods are available on a resource.
+:::
+
+The basic idea is to try to map your business events to URLs and HTTP methods. For instance, a business event of **registering a new user** would
+map to a `POST` request to the `users` collection resource. A business event of **deleting a user account** would map to a `DELETE` request to the `users` collection resource.
+
+:::tip Actions
+In cases you can't map your business events to URLs and HTTP methods, you can use `actions`.
+The author of [such approach](https://restful-api-design.readthedocs.io/en/latest/methods.html#actions) proposes having `actions` sub-resource (either on resource or collection level), where RPC-like messages cane be POSTed to.
+
+An example could look like:
+
+```bash title="Sending an email to a user via an action"
+curl -H 'Content-Type: application/json' -x POST https://api.acme.com/users/123/actions -d '{
+  "type": "SEND_EMAIL",
+  "payload": {
+    "subject": "Welcome to Acme!",
+    "body": "..."
+  }
+}'
+```
+
+On the implementation side, you need to implement a handler able to process polymorphic messages.
+
+The `actions` approach should be used with caution, as if it's heavily used it can signify that your API is not well-designed, or better fits RPC approach.
+:::
+
+### Resource representation
+
+Rest stands for **Representational State Transfer**. This means that application domain data is managed by the client and the server by means of transferring data representations,
+via HTTP methods and URLs. Rest, itself, does not define any specific data format. Clients and servers need to agree on a data format that works for both.
+
+However, `JSON` has become the de-facto standard for data exchange between clients and servers. It is a lightweight, machine and human-readable, and easy to parse data format.
+It is also versatile enough to represent well any complex data structures.
